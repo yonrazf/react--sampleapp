@@ -1,0 +1,36 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+.actions {
+  display: flex;
+  margin-top: 1rem;
+  align-items: center;
+}
+.logout {
+  margin-left: 1rem;
+  background-color: rgb(164, 61, 97);
+}
+.btn-primary {
+  background-color: rgb(80, 132, 192);
+}
+.tenant-select-btn {
+  margin: 0.5rem;
+  padding: 0.3rem;
+}
