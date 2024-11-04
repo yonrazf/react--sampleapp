@@ -1,0 +1,18 @@
+.token-container {
+  height: 100px;
+  width: 300px;
+  overflow-y: auto;
+  background-color: #849fad;
+  position: relative;
+  padding: 0 1rem;
+  margin: 1rem auto;
+  border-radius: 15px;
+  color: white;
+}
+
+.token-text {
+  text-wrap: wrap;
+  width: 300px;
+  word-break: break-all;
+  text-align: center;
+}

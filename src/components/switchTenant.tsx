@@ -1,12 +1,20 @@
 import { useAuthActions } from "@frontegg/react";
 import { useAuth } from "@frontegg/react";
 import { useEffect, useState } from "react";
+
+interface User {
+  tenantId: string;
+  name: string;
+}
+
 export default function SwitchTenantDropDown() {
   const { switchTenant } = useAuthActions();
   const { user } = useAuth();
   const [tenantId, setTenantId] = useState("");
 
-  const [tenantIdToNameMap, setTenantIdToNameMap] = useState({});
+  const [tenantIdToNameMap, setTenantIdToNameMap] = useState<
+    Record<string, string>
+  >({});
 
   useEffect(() => {
     async function fetchTenants() {
@@ -29,10 +37,13 @@ export default function SwitchTenantDropDown() {
 
       const data = await response.json();
 
-      const idToNameMap = data.items.reduce((acc, obj) => {
-        acc[obj.tenantId] = obj.name;
-        return acc;
-      }, {});
+      const idToNameMap = data.items.reduce(
+        (acc: Record<string, string>, obj: User) => {
+          acc[obj.tenantId] = obj.name;
+          return acc;
+        },
+        {}
+      );
 
       setTenantIdToNameMap(idToNameMap);
     }
@@ -47,7 +58,7 @@ export default function SwitchTenantDropDown() {
   return (
     <div>
       <div>
-        <label htmlFor="tenantDropdown">Switch Tenants</label>
+        <label htmlFor="tenantDropdown">Switch Accounts</label>
       </div>
       <select
         id="tenantDropdown"
@@ -68,7 +79,7 @@ export default function SwitchTenantDropDown() {
           className="tenant-select-btn btn-primary"
           onClick={handleSwitchTenant}
         >
-          Select Tenant
+          Select Account
         </button>
       </div>
     </div>

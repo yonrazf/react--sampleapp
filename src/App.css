@@ -23,7 +23,20 @@
   margin-top: 1rem;
   align-items: center;
 }
-.logout {
+.btn-cancel {
+  position: relative;
+  right: -157px;
+  left: auto;
+  top: 50px;
+  z-index: 1;
+  padding: 1rem;
+  border: none;
+  color: rgb(174, 25, 25);
+  font-size: smaller;
+  background: none;
+  margin: none;
+}
+.btn-logout {
   margin-left: 1rem;
   background-color: rgb(164, 61, 97);
 }

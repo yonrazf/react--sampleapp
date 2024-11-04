@@ -1,0 +1,27 @@
+.nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 2rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+}
+.btn-close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: none;
+  transform: none;
+}
+
+.pfp {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+h1 {
+  margin: 0;
+}

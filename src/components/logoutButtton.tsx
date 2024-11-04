@@ -1,13 +1,16 @@
 const baseUrl = import.meta.env.VITE_FE_BASE_URL;
+import { useNavigate } from "react-router";
 
 export default function LogoutBtn() {
+  const navigate = useNavigate();
+
   const logout = () => {
-    window.location.href = `${baseUrl}/oauth/logout?post_logout_redirect_uri=${window.location}`;
+    navigate(`account/logout`);
   };
 
   return (
     <div>
-      <button className="logout" onClick={logout}>
+      <button className="btn-logout" onClick={logout}>
         Logout
       </button>
     </div>
