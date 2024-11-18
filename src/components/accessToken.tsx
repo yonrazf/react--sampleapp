@@ -9,13 +9,18 @@ export default function AccessTokenBtn() {
   if (!user) return null;
   const [canViewToken, setCanViewToken] = useState(false);
   const [showToken, setShowToken] = useState(false);
+  const [decoded, setDecoded] = useState<string>("");
+  const [showDecoded, setShowDecoded] = useState(true);
 
   // example for how a custom permission might be used
   useEffect(() => {
     function getPermissions() {
-      const decoded: any = jwtDecode(user!.accessToken);
+      const decodedAT: any = jwtDecode(user!.accessToken);
+      setDecoded(JSON.stringify(decodedAT, null, 2));
       if (
-        decoded.permissions?.find((str: string) => str === "access.token.read")
+        decodedAT.permissions?.find(
+          (str: string) => str === "access.token.read"
+        )
       ) {
         setCanViewToken(true);
       }
@@ -24,27 +29,36 @@ export default function AccessTokenBtn() {
     getPermissions();
   }, [user]);
 
+  const handleCopy = () => {
+    const text = showDecoded ? decoded : user?.accessToken;
+    copyToClipboard(text);
+  };
+
   return (
     canViewToken && (
       <>
         {!showToken ? (
-          <button onClick={() => setShowToken(true)}>
-            What is my access token?
-          </button>
+          <button onClick={() => setShowToken(true)}>Show Access Token</button>
         ) : (
-          <div>
+          <div className="at-container">
             <button className="btn-cancel" onClick={() => setShowToken(false)}>
               x
             </button>
             <div className="token-container">
-              <p className="token-text">{user?.accessToken}</p>
+              {!showDecoded ? (
+                <p className="token-text">{user?.accessToken}</p>
+              ) : (
+                <pre className="decoded">{decoded}</pre>
+              )}
             </div>
-            <button
-              className="btn-primary"
-              onClick={() => copyToClipboard(user?.accessToken)}
-            >
-              Copy
-            </button>
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <button onClick={() => setShowDecoded((prev) => !prev)}>
+                {">"} {!showDecoded ? "Decoded" : "Encoded"}
+              </button>
+              <button className="btn-primary" onClick={handleCopy}>
+                Copy
+              </button>
+            </div>
           </div>
         )}
       </>

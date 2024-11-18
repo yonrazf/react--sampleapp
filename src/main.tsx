@@ -111,18 +111,50 @@ const localizations = {
 // Define the theme options with the custom footer box
 const themeOptions: FronteggThemeOptions = {
   loginBox: {
-    pageHeader: LangDropdown, // Assign the custom component to the boxFooter property
+    layout: {
+      type: "float-left",
+      splitSize: 75,
+      sideElement: () => {
+        return (
+          <div style={{ width: "25%" }}>
+            <img
+              src="https://www.rollingstone.com/wp-content/uploads/2018/07/stevie-wonder-album-guide.jpg?w=1600&h=900&crop=1"
+              alt="stevie"
+            />
+          </div>
+        );
+      },
+      sideElementStyle: {
+        width: "25%",
+      },
+    },
+    pageHeader: LangDropdown,
+    logo: {
+      image: "https://assets.frontegg.com/public-frontegg-assets/acme-logo.svg",
+    },
   },
   adminPortal: {
     components: {
-      MuiChip: {
+      MuiDialog: {
         styleOverrides: {
-          label: {
-            color: "#57c29b",
+          root: {
+            overflow: "hidden",
+          },
+          paper: {
+            marginLeft: "80px",
+            maxWidth: "calc(100% - 80px)",
+            maxHeight: "90vh",
+            overflow: "hidden",
           },
         },
       },
     },
+  },
+};
+const events = {
+  adminBoxMenuClicked: (payload: any) => {
+    console.log("admin box menu clicked ");
+    console.log(payload);
   },
 };
 
@@ -131,10 +163,12 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <FronteggProvider
+    entitlementsOptions={{ enabled: true }}
     contextOptions={contextOptions}
-    hostedLoginBox={false}
     localizations={localizations}
     themeOptions={themeOptions}
+    events={events}
+    hostedLoginBox={false}
   >
     <App />
   </FronteggProvider>

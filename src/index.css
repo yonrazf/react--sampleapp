@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -19,7 +23,24 @@
   box-shadow: inset 1px 1px 5px rgba(41, 41, 41, 0.601);
   padding: 1rem 0.5rem;
   border-radius: 15px;
-  background-color: #6e5c52;
+  width: 400px;
+  background-color: #212121a4;
+  backdrop-filter: blur(5px);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+input {
+  margin-left: 0.5rem;
+}
+
+.input-container {
+  margin: 1rem 0;
 }
 
 a {
@@ -53,7 +74,9 @@ button {
   font-family: inherit;
   cursor: pointer;
   transition: border-color 0.25s;
-  background-color: #637c82;
+  background-color: #e7e7e7;
+  color: black;
+  padding: 0.3rem 0.5rem;
 }
 button:hover {
   border-color: #d2d2d2;
@@ -62,13 +85,39 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
   }
-  a:hover {
-    color: #747bff;
+}
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }

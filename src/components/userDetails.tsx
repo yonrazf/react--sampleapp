@@ -7,7 +7,13 @@ export default function UserDetails() {
   return (
     user && (
       <div>
-        <img src={user.profilePictureUrl ?? ""} alt={user.name} />
+        <img
+          width={200}
+          height={200}
+          style={{ objectFit: "cover" }}
+          src={user.profilePictureUrl ?? ""}
+          alt={user.name}
+        />
         <div>
           <span>Logged in as {user.name}</span>
         </div>

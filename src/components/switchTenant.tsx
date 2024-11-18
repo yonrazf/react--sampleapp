@@ -1,6 +1,7 @@
 import { useAuthActions } from "@frontegg/react";
 import { useAuth } from "@frontegg/react";
 import { useEffect, useState } from "react";
+import { getToken } from "../utils/getToken";
 
 interface User {
   tenantId: string;
@@ -63,6 +64,12 @@ export default function SwitchTenantDropDown() {
       <select
         id="tenantDropdown"
         value={tenantId}
+        style={{
+          fontSize: "Larger",
+          width: "140px",
+          borderRadius: "5px",
+          fontWeight: 500,
+        }}
         onChange={(e) => setTenantId(e.target.value)}
       >
         <option value={""}>Select option</option>
@@ -84,22 +91,4 @@ export default function SwitchTenantDropDown() {
       </div>
     </div>
   );
-}
-
-const clientId = import.meta.env.VITE_FE_CLIENT_ID;
-const apiKey = import.meta.env.VITE_FE_API_KEY;
-
-async function getToken() {
-  const options = {
-    method: "POST",
-    headers: { accept: "application/json", "content-type": "application/json" },
-    body: JSON.stringify({ clientId, secret: apiKey }),
-  };
-
-  const response = await fetch(
-    "https://api.frontegg.com/auth/vendor/",
-    options
-  );
-  const data = await response.json();
-  return data.token;
 }
