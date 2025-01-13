@@ -1,9 +1,23 @@
 import ReactDOM from "react-dom/client";
 import App from "./App.js";
 import "./index.css";
-import { FronteggThemeOptions } from "@frontegg/react";
+import { FronteggThemeOptions, useEntitlements } from "@frontegg/react";
 import { FronteggProvider } from "@frontegg/react";
 import LangDropdown from "./components/langDropdown.js";
+import { Route, Routes } from "react-router";
+import Page1 from "./pages/page1/index.js";
+
+const IS_HOSTED = false;
+
+window.localStorage.setItem("FE_LOCAL_IS_HOSTED_MODE", `${IS_HOSTED}`);
+
+const tenantResolver = () => {
+  const urlQueryParams = new URLSearchParams(window.location.search);
+  const organization = urlQueryParams.get("organization");
+  return {
+    tenant: organization,
+  };
+};
 
 const baseUrl = import.meta.env.VITE_FE_BASE_URL;
 const clientId = import.meta.env.VITE_FE_CLIENT_ID;
@@ -13,6 +27,7 @@ const contextOptions = {
   baseUrl,
   clientId,
   appId,
+  tenantResolver,
 };
 
 const localizations = {
@@ -30,6 +45,10 @@ const localizations = {
         login: "Log in",
         disclaimerText: "I agree to the",
         privacyLinkText: "Privacy Policy ",
+      },
+      socialLogins: {
+        invalidTitle: "Custom message",
+        failedBackToLogin: "hi",
       },
       activateAccount: {
         title: "Activate your account",
@@ -111,12 +130,21 @@ const localizations = {
 // Define the theme options with the custom footer box
 const themeOptions: FronteggThemeOptions = {
   loginBox: {
+    palette: {
+      text: {
+        secondary: "red",
+        primary: "rgb(175, 90, 175)",
+      },
+    },
+    boxMessageStyle: {
+      color: "red",
+    },
     layout: {
       type: "float-left",
       splitSize: 75,
       sideElement: () => {
         return (
-          <div style={{ width: "25%" }}>
+          <div style={{ width: "150%", height: "100vh" }}>
             <img
               src="https://www.rollingstone.com/wp-content/uploads/2018/07/stevie-wonder-album-guide.jpg?w=1600&h=900&crop=1"
               alt="stevie"
@@ -130,20 +158,35 @@ const themeOptions: FronteggThemeOptions = {
     },
     pageHeader: LangDropdown,
     logo: {
-      image: "https://assets.frontegg.com/public-frontegg-assets/acme-logo.svg",
+      image:
+        "https://www.udiscovermusic.com/wp-content/uploads/2020/09/Stevie-Wonder-GettyImages-84998958.jpg",
     },
   },
   adminPortal: {
+    pages: {
+      security: {
+        tabsProperties: {
+          generalSettings: {
+            fieldsProperties: {
+              mfa: {
+                appearance: "hidden",
+              },
+            },
+          },
+        },
+      },
+      privacy: {
+        fieldsProperties: {
+          mfa: {
+            appearance: "hidden",
+          },
+        },
+      },
+    },
     components: {
       MuiDialog: {
         styleOverrides: {
           root: {
-            overflow: "hidden",
-          },
-          paper: {
-            marginLeft: "80px",
-            maxWidth: "calc(100% - 80px)",
-            maxHeight: "90vh",
             overflow: "hidden",
           },
         },
@@ -168,8 +211,12 @@ root.render(
     localizations={localizations}
     themeOptions={themeOptions}
     events={events}
-    hostedLoginBox={false}
+    hostedLoginBox={IS_HOSTED}
+    // authOptions={{ enableSessionPerTenant: true }}
   >
-    <App />
+    <Routes>
+      <Route path="/page_1" element={<Page1 />} />
+      <Route path="*" element={<App />}></Route>
+    </Routes>
   </FronteggProvider>
 );

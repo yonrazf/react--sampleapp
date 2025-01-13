@@ -5,10 +5,20 @@ import { ContextHolder } from "@frontegg/react";
 export default function LogoutBtn() {
   const navigate = useNavigate();
 
+  const isHosted =
+    window.localStorage.getItem("FE_LOCAL_IS_HOSTED_MODE") === "true";
+
   const logout = () => {
-    const baseUrl = ContextHolder.getContext().baseUrl;
-    // window.location.href = `${baseUrl}/oauth/logout?post_logout_redirect_uri=${window.location}`; // for hosted
-    navigate("/account/logout"); // -> for embedded
+    if (!isHosted) {
+      navigate("/account/logout");
+    } else {
+      try {
+        const baseUrl = ContextHolder.getContext().baseUrl;
+        window.location.href = `${baseUrl}/oauth/logout?post_logout_redirect_uri=${window.location}`; // for hosted
+      } catch (err) {
+        window.location.href = `https://app-kcj0djtbjuee.frontegg.com/oauth/logout?post_logout_redirect_uri=${window.location}`;
+      }
+    }
   };
 
   return (

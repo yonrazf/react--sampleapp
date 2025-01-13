@@ -1,7 +1,12 @@
 import UserDetails from "../components/userDetails";
 import UserActions from "../components/userActions";
-import { useState } from "react";
-import { AuthorizedContent, useAuth } from "@frontegg/react";
+import { useEffect, useState } from "react";
+import {
+  AuthorizedContent,
+  useApplicationsState,
+  useAuth,
+  // useFeatureEntitlements,
+} from "@frontegg/react";
 import "./home.css";
 import BulkInvite from "../components/bulkInvite";
 import {
@@ -14,11 +19,29 @@ import {
 } from "@/components/ui/dialog";
 import { getGenericBackendCall } from "@/utils/getToken";
 import SwitchTenantV2 from "@/components/switchTenantV2";
+import { useApplicationsActions } from "@frontegg/react";
 
 export default function Home() {
   const [showModal, setShowModal] = useState(true);
   const [portalOpen, setPortalOpen] = useState(false);
   const width = window.innerWidth / 2;
+  const applicationsActions = useApplicationsActions();
+  const appliactionsState = useApplicationsState();
+
+  const getApps = async () => {
+    const apps = await applicationsActions.loadAccountApplications();
+
+    console.log(apps);
+    return apps;
+  };
+
+  // const sf = useFeatureEntitlements("sso");
+
+  useEffect(() => {
+    // console.log(sf);
+    getApps();
+    console.log(appliactionsState);
+  }, []);
 
   const { user } = useAuth();
   return (
@@ -91,7 +114,7 @@ export default function Home() {
           </Dialog>
         </div>
 
-        <h1>Sample app</h1>
+        <h1 id="page-title">Sample app</h1>
       </div>
       <div>
         <AuthorizedContent requiredRoles={["Admin"]}>
