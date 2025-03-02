@@ -80,6 +80,10 @@ export default function Home() {
                   borderRadius: "50%",
                   cursor: "pointer",
                   objectFit: "cover",
+                  width: "60px",
+                  height: "60px",
+                  // boxShadow: "5px 3px 5px #333",
+                  border: "solid #223 3px",
                 }}
                 // onClick={() => setShowModal((prev) => !prev)}
                 width={60}
@@ -104,10 +108,10 @@ export default function Home() {
           </button> */}
               <DialogHeader>
                 <DialogTitle>Share link</DialogTitle>
-                <DialogDescription>
+                <div>
                   <UserDetails />
                   <UserActions setPortalOpen={setPortalOpen} />
-                </DialogDescription>
+                </div>
               </DialogHeader>
               {/* </div> */}
             </DialogContent>

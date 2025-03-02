@@ -1,15 +1,27 @@
 const baseUrl = import.meta.env.VITE_FE_BASE_URL;
 import { useNavigate } from "react-router";
-import { ContextHolder } from "@frontegg/react";
+import { ContextHolder, useAuth } from "@frontegg/react";
+import { getToken } from "@/utils/getToken";
 
 export default function LogoutBtn() {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const isHosted =
     window.localStorage.getItem("FE_LOCAL_IS_HOSTED_MODE") === "true";
 
-  const logout = () => {
+  const logout = async () => {
+    const token = await getToken();
     if (!isHosted) {
+      await fetch(
+        "https://api.frontegg.com/tenants/resources/users/sessions/v1/me/all",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "frontegg-user-id": user!.id,
+          },
+        }
+      );
       navigate("/account/logout");
     } else {
       try {

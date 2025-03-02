@@ -16,6 +16,7 @@ export async function getToken() {
   return data.token;
 }
 
+
 export async function getGenericBackendCall(
   url: string,
   tenantId: string,

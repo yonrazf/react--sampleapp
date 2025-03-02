@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { copyToClipboard } from "../utils/copy";
+import { Toaster, toast } from "react-hot-toast";
 import "./accessToken.css";
 import { useAuth } from "@frontegg/react";
+import { getToken } from "@/utils/getToken";
+import { Button } from "./ui/button";
 
 export default function AccessTokenBtn() {
   const { user } = useAuth();
   if (!user) return null;
-  const [canViewToken, setCanViewToken] = useState(false);
+  const [canViewToken, setCanViewToken] = useState(true);
   const [showToken, setShowToken] = useState(false);
   const [decoded, setDecoded] = useState<string>("");
   const [showDecoded, setShowDecoded] = useState(true);
@@ -30,20 +33,37 @@ export default function AccessTokenBtn() {
   }, [user]);
 
   const handleCopy = () => {
-    const text = showDecoded ? decoded : user?.accessToken;
-    copyToClipboard(text);
+    try {
+      const text = showDecoded ? decoded : user?.accessToken;
+      copyToClipboard(text);
+      toast.success("Copied text to clipboard");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to copy text to clipboard");
+    }
+  };
+
+  const getVendorToken = async () => {
+    try {
+      const token = await getToken();
+      copyToClipboard(token);
+      toast.success("Copied vendor token to clipboard");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to create a new vendor token");
+    }
   };
 
   return (
     canViewToken && (
       <>
         {!showToken ? (
-          <button onClick={() => setShowToken(true)}>Show Access Token</button>
+          <Button onClick={() => setShowToken(true)}>Show Access Token</Button>
         ) : (
           <div className="at-container">
-            <button className="btn-cancel" onClick={() => setShowToken(false)}>
+            <Button className="btn-cancel" onClick={() => setShowToken(false)}>
               x
-            </button>
+            </Button>
             <div className="token-container">
               {!showDecoded ? (
                 <p className="token-text">{user?.accessToken}</p>
@@ -52,15 +72,17 @@ export default function AccessTokenBtn() {
               )}
             </div>
             <div style={{ display: "flex", justifyContent: "space-around" }}>
-              <button onClick={() => setShowDecoded((prev) => !prev)}>
+              <Button onClick={() => setShowDecoded((prev) => !prev)}>
                 {">"} {!showDecoded ? "Decoded" : "Encoded"}
-              </button>
-              <button className="btn-primary" onClick={handleCopy}>
+              </Button>
+              <Button className="btn-primary" onClick={handleCopy}>
                 Copy
-              </button>
+              </Button>
             </div>
           </div>
         )}
+        <Button onClick={getVendorToken}>Get new vendor token</Button>
+        <Toaster position="top-right" />
       </>
     )
   );

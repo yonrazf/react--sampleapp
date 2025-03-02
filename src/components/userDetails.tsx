@@ -1,4 +1,9 @@
-import { useAuth, useTenantsState } from "@frontegg/react";
+import {
+  useAuth,
+  useEntitlements,
+  usePermissionEntitlements,
+  useTenantsState,
+} from "@frontegg/react";
 import AccessTokenBtn from "./accessToken";
 import { jwtDecode } from "jwt-decode";
 import { useMemo } from "react";
@@ -65,6 +70,7 @@ export default function UserDetails() {
         <br />
 
         <AccessTokenBtn />
+        {/* <div>{user.accessToken}</div> */}
         <button onClick={openTabs}>Open Tabs</button>
         <button onClick={callSamlCallback}>call saml callback</button>
       </div>

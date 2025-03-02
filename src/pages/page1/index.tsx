@@ -4,15 +4,14 @@ import React, { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Page1 = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const section = searchParams.get("show");
-  const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
   const { isLoading } = useAuthState();
 
   useEffect(() => {
     if (!isAuthenticated && !isLoading) {
-      console.log(window.location.search.toString());
       window.localStorage.setItem(
         "FRONTEGG_AFTER_AUTH_REDIRECT_URL",
         `/page_1/${window.location.search.toString()}`

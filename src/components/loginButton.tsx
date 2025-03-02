@@ -1,6 +1,7 @@
 import { useAuthState, useLoginWithRedirect } from "@frontegg/react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
+import { Button } from "./ui/button";
 
 export default function LoginBtn() {
   const loginWithRedirect = useLoginWithRedirect(); // -> for hosted
@@ -19,9 +20,9 @@ export default function LoginBtn() {
 
   return (
     <div>
-      <button id="login" onClick={() => login()}>
+      <Button id="login" onClick={() => login()}>
         Login
-      </button>
+      </Button>
     </div>
   );
 }
