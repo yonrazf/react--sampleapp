@@ -15,6 +15,11 @@
   padding: 2em;
 }
 
+button {
+  border-radius: 5px !important;
+  padding: 2px;
+}
+
 .read-the-docs {
   color: #888;
 }

@@ -1,6 +1,29 @@
 import { test, expect } from "@playwright/test";
 import { LoginPage } from "./loginSetup";
 import { createDummyUser } from "./mocks/frontegg-mocks";
+import axios from "axios";
+
+const clientId = process.env.VITE_FE_CLIENT_ID;
+const testClientId = process.env.VITE_FE_CLIENT_ID_TEST;
+const apiKey = process.env.VITE_FE_API_KEY;
+
+export async function getToken() {
+  const options = {
+    method: "POST",
+    headers: { accept: "application/json", "content-type": "application/json" },
+    body: JSON.stringify({ clientId, secret: apiKey }),
+  };
+
+  const response = await fetch(
+    "https://api.frontegg.com/auth/vendor/",
+    options
+  );
+  const data = await response.json();
+  return data.token;
+}
+
+const MY_CUSTOM_DOMAIN = "auth.sabich.life";
+const testUserId = "8cc66a38-0195-4295-918b-9740f08f40b3";
 
 test.describe("Authenticated User Tests", () => {
   test("Should display home page for authenticated user", async ({
@@ -80,5 +103,59 @@ test.describe("Authenticated Mock test", () => {
     await page.goto("/");
 
     await expect(page.locator("text=Mocked User")).toBeVisible();
+  });
+});
+
+test.describe("use a session to be already logged in", () => {
+  test("should get token and access localhost:5173 as authenticated", async ({
+    page,
+    context,
+  }) => {
+    const token = await getToken();
+    console.log(token);
+    const sessionResponse = await axios.post(
+      "https://api.frontegg.com/identity/resources/auth/v1/vendor-only/user/session",
+      {
+        userId: testUserId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(sessionResponse.data);
+    const { refreshToken } = sessionResponse.data;
+    console.log("refresh token" + refreshToken);
+
+    const refreshTokenResponse = await axios.post(
+      `https://${MY_CUSTOM_DOMAIN}/identity/resources/auth/v2/user/token/refresh`,
+      {},
+      {
+        headers: {
+          Cookie: `fe_refresh_${testClientId}=${refreshToken}`,
+        },
+      }
+    );
+
+    console.log(refreshTokenResponse.data);
+    const { refreshToken: newRefreshToken } = refreshTokenResponse.data.auth;
+
+    await context.addCookies([
+      {
+        name: `fe_refresh_${testClientId}`,
+        value: newRefreshToken,
+        domain: "." + MY_CUSTOM_DOMAIN,
+        path: "/",
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+      },
+    ]);
+
+    await page.goto("/account");
+
+    await expect(page.locator("text=yonatan")).toBeVisible();
   });
 });

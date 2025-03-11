@@ -200,7 +200,17 @@ export const themeOptions: FronteggThemeOptions = {
     pages: {
       users: {
         inviteUserModal: {
-          inviteByEmail: {},
+          inviteByEmail: {
+            fieldsProperties: {
+              name: {
+                settings: {
+                  validation: {
+                    required: false,
+                  },
+                },
+              },
+            },
+          },
         },
       },
     },

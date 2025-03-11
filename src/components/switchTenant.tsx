@@ -56,6 +56,10 @@ export default function SwitchTenantDropDown() {
     switchTenant({ tenantId });
   };
 
+  const switchToAsd = () => {
+    switchTenant({ tenantId: "1b70b121-494a-449c-9c5b-f8591fdb2d58" });
+  };
+
   return (
     <div>
       <div>
@@ -87,6 +91,9 @@ export default function SwitchTenantDropDown() {
           onClick={handleSwitchTenant}
         >
           Select Account
+        </button>
+        <button className="btn-primary" onClick={switchToAsd}>
+          SWITCH TO ASD
         </button>
       </div>
     </div>
